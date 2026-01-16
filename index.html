@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>jphmind - Web-Based Mindmap</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+</head>
+<body>
+    <div class="app-container">
+        <header class="app-header">
+            <div class="header-left">
+                <h1><i class="fas fa-brain"></i> jphmind</h1>
+                <p class="subtitle">A web-based mindmap application inspired by FreeMind</p>
+            </div>
+            <div class="header-right">
+                <button id="new-map" class="btn btn-primary">
+                    <i class="fas fa-plus"></i> New Mindmap
+                </button>
+                <button id="save-map" class="btn btn-success">
+                    <i class="fas fa-save"></i> Save
+                </button>
+                <button id="load-map" class="btn btn-info">
+                    <i class="fas fa-folder-open"></i> Load
+                </button>
+                <input type="file" id="file-input" accept=".mm,.json" style="display: none;">
+                <button id="export-png" class="btn btn-secondary">
+                    <i class="fas fa-download"></i> Export PNG
+                </button>
+            </div>
+        </header>
+
+        <div class="main-content">
+            <aside class="sidebar">
+                <div class="sidebar-section">
+                    <h3><i class="fas fa-sliders-h"></i> Controls</h3>
+                    <div class="control-group">
+                        <label for="node-text">Node Text:</label>
+                        <input type="text" id="node-text" placeholder="Enter node text">
+                        <button id="add-child" class="btn btn-small">
+                            <i class="fas fa-plus-circle"></i> Add Child Node
+                        </button>
+                        <button id="add-sibling" class="btn btn-small">
+                            <i class="fas fa-plus-square"></i> Add Sibling Node
+                        </button>
+                        <button id="delete-node" class="btn btn-small btn-danger">
+                            <i class="fas fa-trash"></i> Delete Node
+                        </button>
+                    </div>
+                    
+                    <div class="control-group">
+                        <label for="node-color">Node Color:</label>
+                        <input type="color" id="node-color" value="#4a90e2">
+                    </div>
+                    
+                    <div class="control-group">
+                        <label for="font-size">Font Size:</label>
+                        <input type="range" id="font-size" min="10" max="30" value="14">
+                        <span id="font-size-value">14px</span>
+                    </div>
+                    
+                    <div class="control-group">
+                        <label for="layout-direction">Layout Direction:</label>
+                        <select id="layout-direction">
+                            <option value="horizontal">Horizontal</option>
+                            <option value="vertical">Vertical</option>
+                            <option value="radial">Radial</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="sidebar-section">
+                    <h3><i class="fas fa-info-circle"></i> Selected Node</h3>
+                    <div id="node-info">
+                        <p>No node selected</p>
+                    </div>
+                </div>
+                
+                <div class="sidebar-section">
+                    <h3><i class="fas fa-lightbulb"></i> Tips</h3>
+                    <ul class="tips-list">
+                        <li>Double-click on canvas to create a root node</li>
+                        <li>Click on a node to select it</li>
+                        <li>Drag nodes to reposition</li>
+                        <li>Right-click on a node for more options</li>
+                        <li>Use Ctrl+Z to undo, Ctrl+Y to redo</li>
+                    </ul>
+                </div>
+            </aside>
+
+            <main class="mindmap-container">
+                <div class="toolbar">
+                    <div class="toolbar-group">
+                        <button id="zoom-in" class="btn btn-small"><i class="fas fa-search-plus"></i></button>
+                        <button id="zoom-out" class="btn btn-small"><i class="fas fa-search-minus"></i></button>
+                        <button id="zoom-reset" class="btn btn-small">Reset Zoom</button>
+                        <span class="separator"></span>
+                        <button id="undo" class="btn btn-small"><i class="fas fa-undo"></i> Undo</button>
+                        <button id="redo" class="btn btn-small"><i class="fas fa-redo"></i> Redo</button>
+                    </div>
+                    <div class="toolbar-group">
+                        <span id="status">Ready</span>
+                    </div>
+                </div>
+                <div id="mindmap"></div>
+                <div class="hint">
+                    <i class="fas fa-mouse-pointer"></i> Double-click anywhere to create your first node
+                </div>
+            </main>
+        </div>
+
+        <footer class="app-footer">
+            <div class="footer-left">
+                <span>jphmind v1.0 | Inspired by FreeMind</span>
+            </div>
+            <div class="footer-right">
+                <span>Nodes: <span id="node-count">0</span></span>
+                <span class="separator">|</span>
+                <span>Selected: <span id="selected-node">None</span></span>
+            </div>
+        </footer>
+    </div>
+
+    <div id="context-menu" class="context-menu">
+        <ul>
+            <li data-action="edit"><i class="fas fa-edit"></i> Edit Node</li>
+            <li data-action="add-child"><i class="fas fa-plus-circle"></i> Add Child</li>
+            <li data-action="add-sibling"><i class="fas fa-plus-square"></i> Add Sibling</li>
+            <li data-action="delete"><i class="fas fa-trash"></i> Delete Node</li>
+            <li class="separator"></li>
+            <li data-action="change-color"><i class="fas fa-palette"></i> Change Color</li>
+            <li data-action="collapse"><i class="fas fa-minus-circle"></i> Collapse/Expand</li>
+        </ul>
+    </div>
+
+    <script src="mindmap.js"></script>
+</body>
+</html>
